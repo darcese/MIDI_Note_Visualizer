@@ -105,14 +105,21 @@ var context=null;   // the Web Audio "context" object
       console.log(`Raw MIDI message data: ${message.data}`)
     }
 
+// note = {value, velocity, starttime}    
+var notesPlaying = []; 
+
   function useMIDImessageToMoveNotePosition(message){
     if (message.data[2]!==0) {  // if velocity != 0, this is a note-on message
-        let key = event.data[1];
+        let key = message.data[1];
         let noteDistanceFromTop = 0;
         let pixelOffset = 8.75;
         let bottomOfBaseClefDistance = 270;
         let bottomOfTrebbleClefDistance =  61;
         // turn key into a note
+
+        let note = {key: message.data[1], velocity: message.data[2], date: new Date() };
+        console.log(note);
+        notesPlaying.push(note);
 
         switch(key) {
           case 44:
@@ -178,10 +185,12 @@ var context=null;   // the Web Audio "context" object
         let topDistanceAsStyleString = noteDistanceFromTop.toString() + "px";
         document.getElementById("musicNote1").style.top = topDistanceAsStyleString;
         console.log(document.getElementById("musicNote1").style.top);
+        console.log(notesPlaying);
     }
     else if (message.data[2]===0) {
-      // hide note
-      
+      // hide note  
+      notesPlaying = notesPlaying.filter(note => note.key !== message.data[1]);
+      console.log(notesPlaying);
     } else {
       
     }
