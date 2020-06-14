@@ -3,10 +3,13 @@
 
 .staffDiv {
     font-size: xx-large;
+    position: relative;
     margin-left:5%;
     width: 90%;
     height: 340px;
     background-image: url(../images/download.png);
     background-size: cover;
     background-repeat: no-repeat;
+    opacity: 100%;
+    z-index: -1;
 }

@@ -1,3 +1,59 @@
+
+//"use strict";
+
+const updatePeriod = 62.5;
+let updateNumber = 0;
+let noteID = 2;
+const xPositionPixelMultiplier = 5;
+const XPaddingLeft = 150;
+window.setInterval(updateStanza, updatePeriod);
+
+function updateStanza(){
+  
+  updateNumber += 1;
+
+    notesPlaying.forEach(element => {
+
+    if(element.newNote === true){
+      let node = document.getElementById("staffDiv");
+      node.innerHTML +='<div class="musicNoteDiv" id="musicNote'+element.noteID.toString()+'"'+'></div>';
+      let noteHtmlElement = document.getElementById('musicNote'+element.noteID.toString());
+      noteHtmlElement.style.display = "inline";
+      noteHtmlElement.innerHTML = "&#x2669";
+      noteHtmlElement.style.fontSize = "xxx-large";
+      noteHtmlElement.style.position = "absolute";
+      noteHtmlElement.style.zIndex = element.noteID.toString();
+      
+      noteHtmlElement.style.left =  (XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+      noteHtmlElement.style.top = element.noteYLocation;
+      element.newNote = false;
+    }
+    
+  
+  })
+ 
+
+
+ 
+
+  if(updateNumber % 128 === 0){
+    wipeStanza();
+  }
+};
+
+function wipeStanza(){
+  notesPlaying = [];
+  updateNumber = 0;
+  noteID = 2;
+  staffDiv = document.getElementById("staffDiv");
+
+  while (staffDiv.firstChild) {
+    //The list is LIVE so it will re-index each call
+   staffDiv.removeChild(staffDiv.firstChild);
+}
+
+}
+
 var context=null;   // the Web Audio "context" object
     var midiAccess=null;  // the MIDIAccess object.
     var oscillator=null;  // the single oscillator
@@ -115,12 +171,7 @@ var notesPlaying = [];
         let pixelOffset = 8.75;
         let bottomOfBaseClefDistance = 270;
         let bottomOfTrebbleClefDistance =  61;
-        // turn key into a note
-
-        let note = {key: message.data[1], velocity: message.data[2], date: new Date() };
-        console.log(note);
-        notesPlaying.push(note);
-
+     
         switch(key) {
           case 44:
             noteDistanceFromTop = bottomOfBaseClefDistance;
@@ -180,11 +231,23 @@ var notesPlaying = [];
           default:
             break;
         } 
+        // turn key into note
+
+        let topDistanceAsStyleString = noteDistanceFromTop.toString() + "px";
+        let note = {key: message.data[1], 
+          velocity: message.data[2], 
+          date: new Date(), 
+          noteYLocation: topDistanceAsStyleString, 
+          newNote: true, 
+          noteID: noteID+=1};
+
+        console.log(note);
+        notesPlaying.push(note);
           
         //change html note position based on note
-        let topDistanceAsStyleString = noteDistanceFromTop.toString() + "px";
-        document.getElementById("musicNote1").style.top = topDistanceAsStyleString;
-        console.log(document.getElementById("musicNote1").style.top);
+       
+        //document.getElementById("musicNote1").style.top = topDistanceAsStyleString;
+        //console.log(document.getElementById("musicNote1").style.top);
         console.log(notesPlaying);
     }
     else if (message.data[2]===0) {
