@@ -25,6 +25,13 @@ function updateStanza(){
       noteHtmlElement.style.zIndex = element.noteID.toString();
       
       noteHtmlElement.style.left =  (XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+
+      // FOR CHECKING IF SHARPS OR FLATS ARE SELECTED
+      // const form = document.forms.demo;
+      // const checked = form.querySelector('input[name=characters]:checked'); 
+      // // log out the value from the :checked radio
+      // console.log(checked.value);
+
       noteHtmlElement.style.top = element.noteYLocation;
       element.newNote = false;
     }
@@ -47,9 +54,10 @@ function wipeStanza(){
   noteID = 2;
   staffDiv = document.getElementById("staffDiv");
 
-  while (staffDiv.firstChild) {
-    //The list is LIVE so it will re-index each call
-   staffDiv.removeChild(staffDiv.firstChild);
+  // uncomment to clear the stanza again
+  // while (staffDiv.firstChild) {
+  //   //The list is LIVE so it will re-index each call
+  //  staffDiv.removeChild(staffDiv.firstChild);
 }
 
 }

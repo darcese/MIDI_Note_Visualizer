@@ -1,10 +1,49 @@
 
-/*
 
 .musicNoteDiv {
     font-size: xxx-large;
-    position: relative;
-    left: 50%;
-    top: 17px;
+    position: absolute;
 }
+
+#musicNote1{
+    left: 429px; top: 50px;
+}
+
+#musicNote2{
+    left: 429px; top: 150px;
+}
+
+#musicNote3{
+    left: 429px; top: 250px;
+}
+
+#musicNote4{
+    left: 429px; top: 300px;
+}
+
+
+.sharp {
+    font-size: large;
+    position: absolute;
+    left: 425px;
+    top: 288px;
+}
+
+.flat {
+    font-size: large;
+    position: absolute;
+    left: 425px;
+    top: 335px;
+}
+hr{
+    position: absolute;
+    width: 32px;
+    left: 432px;
+    top: 185px;
+    color: black;
+    border-style: solid;
+}
+
+
+
 */

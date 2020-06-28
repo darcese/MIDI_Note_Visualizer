@@ -9,8 +9,19 @@
     <div class="titleBar">MIDI app. Only tested with Nectar MIDI49 so far. Need to add sharps and flats. Make it responsive and add music. Multiple notes at once etc. Middle c and notes above and below clefs need to be add</div>
     <script src="MIDIscript.js"></script>
    
-    <div class="staffDiv" id="staffDiv"> <div class="musicNoteDiv" id="musicNote1">&#x2669;</div></div>
-    <div class="musicNoteDiv" id="musicNote3" style="font-size: xxx-large; position: relative; left: 429px; top: 26px;">♩</div><div class="musicNoteDiv" id="musicNote4" style="font-size: xxx-large; position: relative; left: 429px; top: 17.25px;">♩</div>
+    <div class="staffDiv" id="staffDiv" style="position: absolute;">  
+        <div class="musicNoteDiv" id="musicNote1">&#x2669;</div>
+        <div class="musicNoteDiv" id="musicNote2">♩</div>
+        <hr>
+        <div class="musicNoteDiv" id="musicNote3">♩</div>
+        <div class="sharp">&#9839;</div> 
+
+        <div class="musicNoteDiv" id="musicNote4">♩</div>
+        <div class="flat">&#9837;</div> 
+    </div>
+    <label for="sharpsOrFlats">Sharps or Flats:</label> <br>
+    <input type="radio" name="sharpsOrFlats" value="Sharps"> Sharps <br>
+    <input type="radio" name="sharpsOrFlats" value="Flats"> Flats<br>
     <button onclick="changeNotePosition()">test</button>
    <!---->
     <!-- musical symbols https://fsymbols.com/music/#web  ie &#x2669;--> 
