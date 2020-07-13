@@ -4,6 +4,8 @@
 const updatePeriod = 62.5;
 let updateNumber = 0;
 let noteID = 2;
+let pixelOffset = 8.75;
+let toSharp = true; // if false then flat
 const xPositionPixelMultiplier = 5;
 const XPaddingLeft = 150;
 window.setInterval(updateStanza, updatePeriod);
@@ -22,9 +24,101 @@ function updateStanza(){
       noteHtmlElement.innerHTML = "&#x2669";
       noteHtmlElement.style.fontSize = "xxx-large";
       noteHtmlElement.style.position = "absolute";
-      noteHtmlElement.style.zIndex = element.noteID.toString();
-      
+      noteHtmlElement.style.zIndex = element.noteID.toString();      
       noteHtmlElement.style.left =  (XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+      console.log(element.noteYLocation);
+      noteHtmlElement.style.top = element.noteYLocation;
+      element.newNote = false;
+
+    //   .sharp {
+    //     font-size: large;
+    //     position: absolute;
+    //     left: 425px;
+    //     top: 288px;
+    // }
+    // #musicNote3{
+    //     left: 429px; top: 250px;
+    // }
+    
+    
+    
+    // .flat {
+    //     font-size: large;
+    //     position: absolute;
+    //     left: 425px;
+    //     top: 335px;
+    // }
+    // #musicNote4{
+    //     left: 429px; top: 300px;
+    // }
+    
+      if (element.isSharpOrFlat){
+        if(toSharp){
+          node.innerHTML +='<div class="musicNoteSharpDiv" id="musicNote'+element.noteID.toString()+"sharp"+'"'+'></div>';
+          let noteSharpHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"sharp");
+          noteSharpHTMLElement.style.fontSize = "large";
+          noteSharpHTMLElement.style.position = "absolute";
+          noteSharpHTMLElement.innerHTML = "&#9839";      
+          noteSharpHTMLElement.style.zIndex = element.noteID.toString();      
+          noteSharpHTMLElement.style.left =  (-4 + XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+          noteSharpHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 38).toString() + 'px';
+         
+        }
+        else {
+          /// flat code goes here
+        }
+
+      }
+
+    //   hr{
+    //     position: absolute;
+    //     width: 32px;
+    //     left: 432px;
+    //     top: 185px;
+    //     color: black;
+    //     border-style: solid;
+    // }
+      if(element.needsLineThroughMiddle){
+        node.innerHTML +='<hr class="musicNoteLineThrough" id="musicNote'+element.noteID.toString()+"horizontalRule"+'"'+'>';
+          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"horizontalRule");
+          noteLineThoughHTMLElement.style.width= "32px";
+          noteLineThoughHTMLElement.style.position = "absolute";
+          noteLineThoughHTMLElement.style.color = "black";
+          noteLineThoughHTMLElement.style.borderStyle = "solid";
+          noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
+          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+          noteLineThoughHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 35).toString() + 'px';
+         
+      }
+
+      if(element.needsLineBelow){
+        node.innerHTML +='<hr class="musicNoteLineBelow" id="musicNote'+element.noteID.toString()+"horizontalRuleBelow"+'"'+'>';
+          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"horizontalRuleBelow");
+          noteLineThoughHTMLElement.style.width= "32px";
+          noteLineThoughHTMLElement.style.position = "absolute";
+          noteLineThoughHTMLElement.style.color = "black";
+          noteLineThoughHTMLElement.style.borderStyle = "solid";
+          noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
+          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+          noteLineThoughHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 35 + 2* pixelOffset).toString() + 'px';
+          if(element.needsLineThroughMiddle === false){
+            noteLineThoughHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 35 + 1* pixelOffset).toString() + 'px';
+          }      
+      }
+
+      if(element.needsLineAbove){
+        node.innerHTML +='<hr class="musicNoteLineAbove" id="musicNote'+element.noteID.toString()+"horizontalRuleAbove"+'"'+'>';
+          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"horizontalRuleAbove");
+          noteLineThoughHTMLElement.style.width= "32px";
+          noteLineThoughHTMLElement.style.position = "absolute";
+          noteLineThoughHTMLElement.style.color = "black";
+          noteLineThoughHTMLElement.style.borderStyle = "solid";
+          noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
+          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+          noteLineThoughHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 35 - 2* pixelOffset).toString() + 'px';
+          if(element.needsLineThroughMiddle === false){
+            noteLineThoughHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 35 - 1* pixelOffset).toString() + 'px';
+          }
 
       // FOR CHECKING IF SHARPS OR FLATS ARE SELECTED
       // const form = document.forms.demo;
@@ -32,8 +126,16 @@ function updateStanza(){
       // // log out the value from the :checked radio
       // console.log(checked.value);
 
-      noteHtmlElement.style.top = element.noteYLocation;
-      element.newNote = false;
+    }
+
+      
+
+      // FOR CHECKING IF SHARPS OR FLATS ARE SELECTED
+      // const form = document.forms.demo;
+      // const checked = form.querySelector('input[name=characters]:checked'); 
+      // // log out the value from the :checked radio
+      // console.log(checked.value);
+
     }
     
   
@@ -55,12 +157,12 @@ function wipeStanza(){
   staffDiv = document.getElementById("staffDiv");
 
   // uncomment to clear the stanza again
-  // while (staffDiv.firstChild) {
+  while (staffDiv.firstChild) {
   //   //The list is LIVE so it will re-index each call
-  //  staffDiv.removeChild(staffDiv.firstChild);
-}
+ staffDiv.removeChild(staffDiv.firstChild);
+}};
 
-}
+
 
 var context=null;   // the Web Audio "context" object
     var midiAccess=null;  // the MIDIAccess object.
@@ -172,91 +274,277 @@ var context=null;   // the Web Audio "context" object
 // note = {value, velocity, starttime}    
 var notesPlaying = []; 
 
-  function useMIDImessageToMoveNotePosition(message){
+  function useMIDImessageToMoveNotePosition(message, _isSharpOrFlat, _noteNameAsString, _alreadyManipulated, _needsLineThroughMiddle,
+    _needsLineAbove, _needsLineBelow){
     if (message.data[2]!==0) {  // if velocity != 0, this is a note-on message
         let key = message.data[1];
         let noteDistanceFromTop = 0;
         let pixelOffset = 8.75;
         let bottomOfBaseClefDistance = 270;
         let bottomOfTrebbleClefDistance =  61;
+        let isSharpOrFlat = _isSharpOrFlat || false;
+        let noteNameAsString = _noteNameAsString || "";
+        let alreadyManipulated = _alreadyManipulated || false;
+        let needsLineThroughMiddle = _needsLineThroughMiddle || false;
+        let needsLineAbove = _needsLineAbove || false;
+        let needsLineBelow = _needsLineBelow || false;
      
         switch(key) {
+          //first midi note
+          case 37:
+            needsLineThroughMiddle = true;
+            needsLineAbove = true;
+            noteDistanceFromTop = bottomOfBaseClefDistance + 4*pixelOffset;
+            break;
+
+          case 38:
+            isSharpOrFlat = true;
+            break;
+
+          case 39:
+            needsLineAbove = true;
+            noteDistanceFromTop = bottomOfBaseClefDistance + 3*pixelOffset;
+            break;
+
+          case 40:
+            isSharpOrFlat = true;
+            break;
+
+          case 41:
+            needsLineThroughMiddle = true;
+            noteDistanceFromTop = bottomOfBaseClefDistance + 2*pixelOffset;
+            break;
+
+          case 42:
+            needsLineBelow = true;
+            noteDistanceFromTop = bottomOfBaseClefDistance + 1*pixelOffset;
+            break;
+
+          case 43:
+            isSharpOrFlat = true;
+            break;
+
           case 44:
             noteDistanceFromTop = bottomOfBaseClefDistance;
             break;
+
+          case 45:
+            isSharpOrFlat = true;
+            break;
+          
           case 46:
             noteDistanceFromTop = bottomOfBaseClefDistance- pixelOffset;
             break;
+
+          case 47:
+            isSharpOrFlat = true;
+            break;
+
           case 48:
             noteDistanceFromTop = bottomOfBaseClefDistance- 2 * pixelOffset;
             break;
+
           case 49:
             noteDistanceFromTop = bottomOfBaseClefDistance - 3 * pixelOffset;
             break;
+
+          case 50:
+            isSharpOrFlat = true;
+            break;
+
           case 51:
             noteDistanceFromTop = bottomOfBaseClefDistance - 4 * pixelOffset;
             break;
+
+          case 52:
+            isSharpOrFlat = true;
+            break;
+
           case 53:
             noteDistanceFromTop = bottomOfBaseClefDistance- 5 * pixelOffset;
             break;
+
           case 54:
             noteDistanceFromTop = bottomOfBaseClefDistance- 6 * pixelOffset;
             break;
+
+          case 55:
+            isSharpOrFlat = true;
+            break;
+
           case 56:
             noteDistanceFromTop = bottomOfBaseClefDistance - 7 * pixelOffset;
             break;
+
+          case 57:
+            isSharpOrFlat = true;
+            break;
+
           case 58:
             noteDistanceFromTop = bottomOfBaseClefDistance - 8 * pixelOffset;
             break;
           
+          case 59:
+            isSharpOrFlat = true;
+            break;
+
+          case 60:
+            needsLineAbove = true;
+            noteDistanceFromTop = bottomOfBaseClefDistance - 9 * pixelOffset;
+            break;
+
+          case 61:
+            needsLineThroughMiddle = true;
+            noteDistanceFromTop = bottomOfTrebbleClefDistance + 2*pixelOffset;
+            break;
+
+          case 62:
+            isSharpOrFlat = true;
+            break;
+
+          case 63: 
+            needsLineBelow = true;
+            noteDistanceFromTop = bottomOfTrebbleClefDistance + pixelOffset;
+            break;
+
+          case 64:
+            isSharpOrFlat = true;
+            break;
+
           case 65:
             noteDistanceFromTop = bottomOfTrebbleClefDistance;
             break;
+
           case 66:
             noteDistanceFromTop = bottomOfTrebbleClefDistance - pixelOffset;
             break;
+
+          case 67:
+            isSharpOrFlat = true;
+            break;
+
           case 68:
             noteDistanceFromTop = bottomOfTrebbleClefDistance - 2*pixelOffset;
             break;
+
+          case 69:
+            isSharpOrFlat = true;
+            break;
+
           case 70:
             noteDistanceFromTop = bottomOfTrebbleClefDistance -3*pixelOffset;
             break;
+
+          case 71:
+            isSharpOrFlat = true;
+            break;
+
           case 72:
             noteDistanceFromTop = bottomOfTrebbleClefDistance - 4*pixelOffset;
             break;
+
           case 73:
             noteDistanceFromTop = bottomOfTrebbleClefDistance - 5*pixelOffset;
             break;
+         
+          case 74:
+            isSharpOrFlat = true;
+            break;
+
           case 75:
             noteDistanceFromTop = bottomOfTrebbleClefDistance - 6* pixelOffset;
             break;
+         
+          case 76:
+            isSharpOrFlat = true;
+            break;
+
           case 77:
             noteDistanceFromTop = bottomOfTrebbleClefDistance - 7 * pixelOffset;
             break;
+
           case 78:
             noteDistanceFromTop = bottomOfTrebbleClefDistance - 8 * pixelOffset;
             break;
+
+          case 79:
+            isSharpOrFlat = true;
+            break;
+
+          case 80:
+            needsLineAbove = true;
+            noteDistanceFromTop = bottomOfTrebbleClefDistance - 9 * pixelOffset;
+            break;
+
+          case 81:
+            isSharpOrFlat = true;
+            break;
+
+          case 82:
+            needsLineThroughMiddle = true;
+            noteDistanceFromTop = bottomOfTrebbleClefDistance - 10 * pixelOffset;
+            break;
+
+          case 83:
+            isSharpOrFlat = true;
+            break;
+
+          case 84:
+            needsLineBelow = true;
+            noteDistanceFromTop = bottomOfTrebbleClefDistance - 11 * pixelOffset;
+            break;
+
+          case 85:
+            needsLineThroughMiddle = true;
+            needsLineBelow = true;
+            noteDistanceFromTop = bottomOfTrebbleClefDistance - 12 * pixelOffset;
+            break;
+     
           default:
             break;
         } 
+
+        if(isSharpOrFlat && !alreadyManipulated){
+           // manipulate message to add the sharp or flat but put key in non-special location
+           var manipulatedMessage = message;
+           manipulatedMessage.data[1] += (toSharp? -1 : 1);
+
+           //message, _isSharpOrFlat, _noteNameAsString, _alreadyManipulated
+
+           // _isSharpOrFlat, _noteNameAsString, _alreadyManipulated, _needsLineThroughMiddle,
+    //_needsLineAbove, _needsLineBelow
+           useMIDImessageToMoveNotePosition(manipulatedMessage, true, "", true, needsLineThroughMiddle, _needsLineAbove, _needsLineBelow);
+        }
         // turn key into note
 
-        let topDistanceAsStyleString = noteDistanceFromTop.toString() + "px";
-        let note = {key: message.data[1], 
-          velocity: message.data[2], 
-          date: new Date(), 
-          noteYLocation: topDistanceAsStyleString, 
-          newNote: true, 
-          noteID: noteID+=1};
+        else{
+          let topDistanceAsStyleString = noteDistanceFromTop.toString() + "px";
+          let note = {key: message.data[1], 
+            velocity: message.data[2], 
+            date: new Date(), 
+            noteYLocation: topDistanceAsStyleString, 
+            newNote: true, 
+            noteID: noteID+=1,
+            isSharpOrFlat: isSharpOrFlat,
+            isOffStanza: {booleanCheck: false, extraLinesRequired: 0, landsInLine: false  },
+            needsLineAbove: needsLineAbove,
+            needsLineThroughMiddle: needsLineThroughMiddle,
+            needsLineBelow: needsLineBelow,
+        };
 
-        console.log(note);
-        notesPlaying.push(note);
+  
+  
+          console.log(note);
+          notesPlaying.push(note);
+          console.log(notesPlaying);
+        }
+       
           
         //change html note position based on note
        
         //document.getElementById("musicNote1").style.top = topDistanceAsStyleString;
         //console.log(document.getElementById("musicNote1").style.top);
-        console.log(notesPlaying);
+       
     }
     else if (message.data[2]===0) {
       // hide note  

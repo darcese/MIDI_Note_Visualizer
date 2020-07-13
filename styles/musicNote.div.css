@@ -9,17 +9,7 @@
     left: 429px; top: 50px;
 }
 
-#musicNote2{
-    left: 429px; top: 150px;
-}
 
-#musicNote3{
-    left: 429px; top: 250px;
-}
-
-#musicNote4{
-    left: 429px; top: 300px;
-}
 
 
 .sharp {
@@ -28,12 +18,25 @@
     left: 425px;
     top: 288px;
 }
+#musicNote3{
+    left: 429px; top: 250px;
+}
+
+
 
 .flat {
     font-size: large;
     position: absolute;
     left: 425px;
     top: 335px;
+}
+#musicNote4{
+    left: 429px; top: 300px;
+}
+
+
+#musicNote2{
+    left: 429px; top: 150px;
 }
 hr{
     position: absolute;
