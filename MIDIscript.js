@@ -1,6 +1,34 @@
 
 //"use strict";
 
+
+
+// console.log(sharpsOrFlatsOption.length);
+// for (i = 0; i < sharpsOrFlatsOption.length; i++) {
+//     self =  sharpsOrFlatsOption[i];
+//     sharpsOrFlatsOption[i].addEventListener('change',  () => {
+//     () => {SharpsOrFlatsNow = this.value;
+//             console.log(SharpsOrFlatsNow)}();      
+//     })
+  
+//   }
+
+var SharpsOrFlatsNow = "Sharps";
+const sharpsOption = document.getElementById("radioSharps")
+sharpsOption.addEventListener('change', () => {
+  sharpsOption.checked == true ? SharpsOrFlatsNow = "Sharps" :  SharpsOrFlatsNow = "Flats";
+  console.log(SharpsOrFlatsNow);
+})
+// for some reason the change event only fires when the radio goes from checked
+// to unchecked. which it also fired when it went from unchecked to checked so i wouldnt
+// have both of these
+const flatsOption = document.getElementById("radioFlats")
+flatsOption.addEventListener('change', () => {
+  flatsOption.checked == true ? SharpsOrFlatsNow = "Flats" :  SharpsOrFlatsNow = "Sharps";
+  console.log(SharpsOrFlatsNow);
+})
+
+
 const updatePeriod = 62.5;
 let updateNumber = 0;
 let noteID = 2;
@@ -11,7 +39,11 @@ const XPaddingLeft = 150;
 window.setInterval(updateStanza, updatePeriod);
 
 function updateStanza(){
-  
+if(updateNumber % 128 === 0){
+      wipeStanza();
+    }
+
+ 
   updateNumber += 1;
 
     notesPlaying.forEach(element => {
@@ -53,7 +85,7 @@ function updateStanza(){
     // }
     
       if (element.isSharpOrFlat){
-        if(toSharp){
+        if(SharpsOrFlatsNow == "Sharps"){
           node.innerHTML +='<div class="musicNoteSharpDiv" id="musicNote'+element.noteID.toString()+"sharp"+'"'+'></div>';
           let noteSharpHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"sharp");
           noteSharpHTMLElement.style.fontSize = "large";
@@ -64,11 +96,21 @@ function updateStanza(){
           noteSharpHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 38).toString() + 'px';
          
         }
-        else {
-          /// flat code goes here
-        }
-
+        else if (SharpsOrFlatsNow == "Flats") {
+          node.innerHTML +='<div class="musicNoteFlatDiv" id="musicNote'+element.noteID.toString()+"flat"+'"'+'></div>';
+          let noteSharpHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"flat");
+          noteSharpHTMLElement.style.fontSize = "large";
+          noteSharpHTMLElement.style.position = "absolute";
+          noteSharpHTMLElement.innerHTML = "&#9837";      
+          noteSharpHTMLElement.style.zIndex = element.noteID.toString();      
+          noteSharpHTMLElement.style.left =  (-4 + XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+          noteSharpHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 36).toString() + 'px';
+         
+        } 
+         
       }
+
+      
 
     //   hr{
     //     position: absolute;
@@ -119,14 +161,14 @@ function updateStanza(){
           if(element.needsLineThroughMiddle === false){
             noteLineThoughHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 35 - 1* pixelOffset).toString() + 'px';
           }
-
+      }
       // FOR CHECKING IF SHARPS OR FLATS ARE SELECTED
       // const form = document.forms.demo;
       // const checked = form.querySelector('input[name=characters]:checked'); 
       // // log out the value from the :checked radio
       // console.log(checked.value);
 
-    }
+    
 
       
 
@@ -138,17 +180,16 @@ function updateStanza(){
 
     }
     
+    
   
-  })
+  })};
  
 
 
  
 
-  if(updateNumber % 128 === 0){
-    wipeStanza();
-  }
-};
+
+
 
 function wipeStanza(){
   notesPlaying = [];
@@ -554,6 +595,10 @@ var notesPlaying = [];
       
     }
   }
+
+
+
+
 
   
     
