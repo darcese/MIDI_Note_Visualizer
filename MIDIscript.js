@@ -31,11 +31,14 @@ flatsOption.addEventListener('change', () => {
 
 const updatePeriod = 62.5;
 let updateNumber = 0;
+let devMode = false;
 let noteID = 2;
 let pixelOffset = 8.75;
 let toSharp = true; // if false then flat
 const xPositionPixelMultiplier = 5;
 const XPaddingLeft = 150;
+let recordings = [];
+
 window.setInterval(updateStanza, updatePeriod);
 
 function updateStanza(){
@@ -192,15 +195,18 @@ if(updateNumber % 128 === 0){
 
 
 function wipeStanza(){
-  notesPlaying = [];
-  updateNumber = 0;
-  noteID = 2;
-  staffDiv = document.getElementById("staffDiv");
-
-  // uncomment to clear the stanza again
-  while (staffDiv.firstChild) {
-  //   //The list is LIVE so it will re-index each call
- staffDiv.removeChild(staffDiv.firstChild);
+  if(devMode===false){
+    notesPlaying = [];
+    updateNumber = 0;
+    noteID = 2;
+    staffDiv = document.getElementById("staffDiv");
+  
+    // uncomment to clear the stanza again
+    while (staffDiv.firstChild) {
+    //   //The list is LIVE so it will re-index each call
+   staffDiv.removeChild(staffDiv.firstChild);
+  }
+  
 }};
 
 
@@ -320,9 +326,9 @@ var notesPlaying = [];
     if (message.data[2]!==0) {  // if velocity != 0, this is a note-on message
         let key = message.data[1];
         let noteDistanceFromTop = 0;
-        let pixelOffset = 8.75;
-        let bottomOfBaseClefDistance = 270;
-        let bottomOfTrebbleClefDistance =  61;
+        let pixelOffset = 9.25;
+        let bottomOfBaseClefDistance = 292;
+        let bottomOfTrebbleClefDistance =  69;
         let isSharpOrFlat = _isSharpOrFlat || false;
         let noteNameAsString = _noteNameAsString || "";
         let alreadyManipulated = _alreadyManipulated || false;
@@ -330,7 +336,7 @@ var notesPlaying = [];
         let needsLineAbove = _needsLineAbove || false;
         let needsLineBelow = _needsLineBelow || false;
      
-        switch(key) {
+        switch(key -1) {
           //first midi note
           case 37:
             needsLineThroughMiddle = true;
@@ -597,6 +603,59 @@ var notesPlaying = [];
   }
 
 
+  function createRecording(){
+    console.log("creating recording");
+    recording = [];
+    const musicElements = document.getElementById("staffDiv").children;
+    for(var i = 0; i < musicElements.length; i++){
+      recording.push(musicElements[i]);
+    }
+    recordings.push(recording);
+    createReplayRecordingButton();
+  };
+
+  function createReplayRecordingButton(){
+    // 1. Create the button
+    var button = document.createElement("button");
+    button.innerHTML = "Show Recording" + String(recordings.length);
+
+// 2. Append somewhere
+    var body = document.getElementsByTagName("body")[0];
+    body.appendChild(button);
+
+// 3. Add event handler
+    const thisRecordingIndex = recordings.length - 1;
+    button.addEventListener ("click", function() {
+    console.log(thisRecordingIndex);
+    showRecording(thisRecordingIndex);}
+);
+
+/* Read 
+
+https://css-tricks.com/use-button-element/
+*/
+  };
+
+  function showRecording(recordingIndex){
+    
+    recording = recordings[recordingIndex];
+    for(var i = 0; i < recording.length; i++){
+      document.getElementById("staffDiv").appendChild(recording[i]);
+    }
+  }
+
+  function hideAllNotes(){
+    wipeStanza();
+  };
+
+
+//   someObj.addEventListener('click', some_function(someVar));
+
+// var some_function = function(someVar) {
+//     return function curried_func(e) {
+//         // do something here
+//     }
+// }
 
 
 
