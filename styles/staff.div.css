@@ -2,8 +2,8 @@
 
 
 .staffDiv {
-    font-size: xx-large;
-    position: relative;
+    font-size: xxxx-large;
+    position: absolute;
     margin-left:5%;
     width: 90%;
     height: 350px;
@@ -12,4 +12,8 @@
     background-repeat: no-repeat;
     opacity: 100%;
     z-index: -1;
+    font-family: Symbola;   
 }
+
+
+

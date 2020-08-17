@@ -323,6 +323,63 @@ var notesPlaying = [];
 
   function useMIDImessageToMoveNotePosition(message, _isSharpOrFlat, _noteNameAsString, _alreadyManipulated, _needsLineThroughMiddle,
     _needsLineAbove, _needsLineBelow){
+    if (message.data[2]==0){ // note off message
+      let newDate = new Date();
+      let noteEndTime = newDate.getTime();
+      let noteThatJustFinished = notesPlaying.filter(note => note.key == message.data[1])[0];
+      if(noteThatJustFinished == undefined) return console.log("note is already gone");
+      let noteStartTime = noteThatJustFinished.date.getTime();
+      let noteLength = noteEndTime - noteStartTime;
+      console.log(noteLength);
+      
+      let noteId = noteThatJustFinished.noteID;
+      let noteHtmlElement = document.getElementById('musicNote'+noteID.toString());
+      if(noteHtmlElement == null) return ;
+      
+      if(noteLength < 100){
+        noteHtmlElement.innerHTML = "&#119139;";
+        ;
+      }
+      else if(noteLength < 200){
+        noteHtmlElement.innerHTML = "&#119138;"
+
+      }
+      else if(noteLength < 300){
+        noteHtmlElement.innerHTML = "&#119137;"
+
+      }
+      else if(noteLength < 400){
+        noteHtmlElement.innerHTML = "&#119136;"
+
+      }
+      else if(noteLength < 500){
+        noteHtmlElement.innerHTML = "&#119135;"
+
+      }
+      else if(noteLength < 600){
+        noteHtmlElement.innerHTML = "&#119134;"
+
+      }
+      else if(noteLength < 700){
+        noteHtmlElement.innerHTML = "&#119133;"
+
+      }
+      else if(noteLength < 800){
+        noteHtmlElement.innerHTML = "&#119132;"
+
+      }
+      else if(noteLength < 900){
+        noteHtmlElement.innerHTML = "&#119131;"
+
+      }
+      else{
+        noteHtmlElement.innerHTML = "&#119130;"
+      }
+
+      
+
+    }
+
     if (message.data[2]!==0) {  // if velocity != 0, this is a note-on message
         let key = message.data[1];
         let noteDistanceFromTop = 0;
