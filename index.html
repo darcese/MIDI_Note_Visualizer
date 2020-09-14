@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="styles/generalStyles.css">
     <link rel="stylesheet" href="styles/staff.div.css">
     <link rel="stylesheet" href="styles/musicNote.div.css">
-    <div class="titleBar">MIDI app. Only tested with Nectar MIDI49 so far. Need to add sharps and flats. Make it responsive and add music. Multiple notes at once etc. Middle c and notes above and below clefs need to be add</div>
+    <div class="titleBar">MIDI app. Only tested with Nectar MIDI49 so far.</div>
     
    
     <!---->
@@ -16,27 +16,41 @@
 </head>
 <body>
    <div class="test-div">
-    &#119139; &#9839; 	&#9834; &#9833;
    </div>
-    <div class="staffDiv" id="staffDiv" style="position: absolute;"> 
-        <div class="musicNoteDivassd" id="musicNote"> &#9836;
-        </div> 
-        <div class="musicNoteDiv" id="musicNote1">	&#9836;</div>
-        <div class="musicNoteDiv" id="musicNote2">♩</div>
-        <hr>
-       
-        <div class="musicNoteDiv" id="musicNote3">♩</div>
-        <div class="sharp">&#9839;</div> 
-
-        <div class="musicNoteDiv" id="musicNote4">♩</div>
-        <div class="flat">&#9837;</div> 
+    <div class="staffDiv" id="staffDiv"> 
+        <div class="test-staff-width-horizontal"></div>
     </div>
-    <label for="sharpsOrFlats">Sharps or Flats:</label> 
-    <input type="radio" id="radioSharps" name="sharpsOrFlats" value="Sharps" checked="checked"> Sharps</input>
-    <input type="radio" id="radioFlats" name="sharpsOrFlats" value="Flats"> Flats</input>
-    <button onclick="hideAllNotes()">Hide All Notes</button>
-    <button onclick="createRecording()">Create Recording</button>
-    &#119133;
+
+    <div class="controlsContainer" id="controlsContainer">
+        <div class="sharpsOrFlatsContainer">
+            <div> <label for="sharpsOrFlats">Sharps or Flats:</label> </div>
+                
+            <div>
+                <input type="radio" id="radioSharps" name="sharpsOrFlats" value="Sharps" checked="checked"> Sharps</input>
+                <input type="radio" id="radioFlats" name="sharpsOrFlats" value="Flats"> Flats</input>
+            </div>
+
+            <hr></hr>
+
+
+        </div>
+
+        <button onclick="hideAllNotes()">Clear Stanza</button>
+        <button onclick="createRecording()">Create Recording</button>
+        <div id="recordingsContainerDiv" style="visibility: hidden;">
+            <select id = "RecordingSelecter"><select name = "dropdown">
+                <option value = "Live"></option>
+             </select>
+        </div>
+    </div>
+
+   
+
+   
+   
+    
+   
+   
 </body>
 
 <script src="MIDIscript.js"></script>

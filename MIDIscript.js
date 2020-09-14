@@ -31,19 +31,47 @@ flatsOption.addEventListener('change', () => {
 
 const updatePeriod = 62.5;
 let updateNumber = 0;
+let usableStanzaWidth = 770;
+let usableStanzaStart = 110;
+let beatsPerMinute = 120;
+let BeatsPerSecond = beatsPerMinute / 60;
+let wholeNoteMilliseconds = 1000 * 4 / BeatsPerSecond;
 let devMode = false;
 let noteID = 2;
-let pixelOffset = 8.75;
+let pixelOffset = 9;
 let toSharp = true; // if false then flat
 const xPositionPixelMultiplier = 5;
-const XPaddingLeft = 150;
+const XPaddingLeft = usableStanzaStart;
+const xAdditionalLinePaddingLeft = -5;
 let recordings = [];
-
+const bottomOfBaseClefDistance = 270;
+const bottomOfTrebbleClefDistance =  55;
+const lineToNoteDistanceOffset = 53;
+let sharpsAndFlatsKeyNumbers = [38,
+                                40,
+                                43,
+                                45,
+                                47,
+                                50,
+                                52,
+                                55,
+                                57,
+                                59,
+                                62,
+                                64,
+                                67,
+                                69,
+                                71,
+                                74,
+                                76,
+                                79,
+                                81,
+                                83];
 window.setInterval(updateStanza, updatePeriod);
 
 function updateStanza(){
 if(updateNumber % 128 === 0){
-      wipeStanza();
+     //wipeStanza();
     }
 
  
@@ -57,35 +85,13 @@ if(updateNumber % 128 === 0){
       let noteHtmlElement = document.getElementById('musicNote'+element.noteID.toString());
       noteHtmlElement.style.display = "inline";
       noteHtmlElement.innerHTML = "&#x2669";
-      noteHtmlElement.style.fontSize = "xxx-large";
+      //noteHtmlElement.style.fontSize = "xxx-large";
       noteHtmlElement.style.position = "absolute";
       noteHtmlElement.style.zIndex = element.noteID.toString();      
       noteHtmlElement.style.left =  (XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
       console.log(element.noteYLocation);
       noteHtmlElement.style.top = element.noteYLocation;
       element.newNote = false;
-
-    //   .sharp {
-    //     font-size: large;
-    //     position: absolute;
-    //     left: 425px;
-    //     top: 288px;
-    // }
-    // #musicNote3{
-    //     left: 429px; top: 250px;
-    // }
-    
-    
-    
-    // .flat {
-    //     font-size: large;
-    //     position: absolute;
-    //     left: 425px;
-    //     top: 335px;
-    // }
-    // #musicNote4{
-    //     left: 429px; top: 300px;
-    // }
     
       if (element.isSharpOrFlat){
         if(SharpsOrFlatsNow == "Sharps"){
@@ -112,74 +118,129 @@ if(updateNumber % 128 === 0){
         } 
          
       }
+      // let needsTrebbleClefSecondFromTopHorizontal  = _needsTrebbleClefSecondFromTopHorizontal || false;
+      // let needsTrebbleClefBottomHorizontal = _needsTrebbleClefBottomHorizontal || false;
+      // let needsBaseClefTopHorizontal = _needsBaseClefTopHorizontal || false;
+      // let needsBaseClefSecondFromBottonHorizontal = _needsBaseClefSecondFromBottonHorizontal || false;
+      // let needsBaseClefBottomMostHorizontal 
 
-      
 
-    //   hr{
-    //     position: absolute;
-    //     width: 32px;
-    //     left: 432px;
-    //     top: 185px;
-    //     color: black;
-    //     border-style: solid;
-    // }
-      if(element.needsLineThroughMiddle){
-        node.innerHTML +='<hr class="musicNoteLineThrough" id="musicNote'+element.noteID.toString()+"horizontalRule"+'"'+'>';
-          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"horizontalRule");
-          noteLineThoughHTMLElement.style.width= "32px";
-          noteLineThoughHTMLElement.style.position = "absolute";
-          noteLineThoughHTMLElement.style.color = "black";
-          noteLineThoughHTMLElement.style.borderStyle = "solid";
+
+      // <div class="trebbleclef-topmost-horizontal"></div>
+      // <div class="trebbleclef-secondfromtop-horizontal"></div>
+      // <div class="trebbleclef-bottom-horizontal"></div>
+
+      // <div class="baseclef-top-horizontal"></div>
+      // <div class="baseclef-secondfrombottom-horizontal"></div>
+      // <div class="baseclef-bottommost-horizontal"></div>
+      let leftposition = usableStanzaStart + BeatsPerSecond * usableStanzaWidth / 16 * updateNumber * updatePeriod / 1000;
+      if(element.needsTrebbleClefTopMostHorizontal){
+        node.innerHTML +='<div class="trebbleclef-topmost-horizontal" id="musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal"+'"'+'/>';
+          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal");
           noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
-          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
-          noteLineThoughHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 35).toString() + 'px';
+          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xAdditionalLinePaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+      
+      }
+
+      if(element.needsTrebbleClefSecondFromTopHorizontal){
+        node.innerHTML +='<div class="trebbleclef-secondfromtop-horizontal" id="musicNote'+element.noteID.toString()+"TrebbleClefSecondFromTopHorizontal"+'"'+'/>';
+          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"TrebbleClefSecondFromTopHorizontal");      
+          noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
+          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xAdditionalLinePaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+ 
+      }
+      console.log("adf");
+      console.log(element.needsTrebbleClefBottomHorizontal);
+      if(element.needsTrebbleClefBottomHorizontal){
+        node.innerHTML +='<div class="trebbleclef-bottom-horizontal" id="musicNote'+element.noteID.toString()+"TrebbleClefBottomHorizontal"+'"'+'/>';
+          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"TrebbleClefBottomHorizontal");
+          noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
+          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xAdditionalLinePaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
          
       }
 
-      if(element.needsLineBelow){
-        node.innerHTML +='<hr class="musicNoteLineBelow" id="musicNote'+element.noteID.toString()+"horizontalRuleBelow"+'"'+'>';
-          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"horizontalRuleBelow");
-          noteLineThoughHTMLElement.style.width= "32px";
-          noteLineThoughHTMLElement.style.position = "absolute";
-          noteLineThoughHTMLElement.style.color = "black";
-          noteLineThoughHTMLElement.style.borderStyle = "solid";
+      if(element.needsBaseClefTopHorizontal ){
+        node.innerHTML +='<div class="baseclef-top-horizontal" id="musicNote'+element.noteID.toString()+"BaseClefTopHorizontal"+'"'+'/>';
+          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"BaseClefTopHorizontal");
           noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
-          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
-          noteLineThoughHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 35 + 2* pixelOffset).toString() + 'px';
-          if(element.needsLineThroughMiddle === false){
-            noteLineThoughHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 35 + 1* pixelOffset).toString() + 'px';
-          }      
+          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xAdditionalLinePaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+          
       }
 
-      if(element.needsLineAbove){
-        node.innerHTML +='<hr class="musicNoteLineAbove" id="musicNote'+element.noteID.toString()+"horizontalRuleAbove"+'"'+'>';
-          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"horizontalRuleAbove");
-          noteLineThoughHTMLElement.style.width= "32px";
-          noteLineThoughHTMLElement.style.position = "absolute";
-          noteLineThoughHTMLElement.style.color = "black";
-          noteLineThoughHTMLElement.style.borderStyle = "solid";
+      if(element.needsBaseClefSecondFromBottonHorizontal){
+        node.innerHTML +='<div class="baseclef-secondfrombottom-horizontal" id="musicNote'+element.noteID.toString()+"BaseClefSecondFromBottonHorizontal"+'"'+'/>';
+          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"BaseClefSecondFromBottonHorizontal");
           noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
-          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
-          noteLineThoughHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 35 - 2* pixelOffset).toString() + 'px';
-          if(element.needsLineThroughMiddle === false){
-            noteLineThoughHTMLElement.style.top = (parseInt(element.noteYLocation.replace("px","")) + 35 - 1* pixelOffset).toString() + 'px';
-          }
-      }
-      // FOR CHECKING IF SHARPS OR FLATS ARE SELECTED
-      // const form = document.forms.demo;
-      // const checked = form.querySelector('input[name=characters]:checked'); 
-      // // log out the value from the :checked radio
-      // console.log(checked.value);
-
-    
-
+          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xAdditionalLinePaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
       
+      }
+     
+      if(element.needsBaseClefBottomMostHorizontal ){
+        node.innerHTML +='<div class="baseclef-bottommost-horizontal" id="musicNote'+element.noteID.toString()+"BaseClefBottomMostHorizontal"+'"'+'/>';
+          let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"BaseClefBottomMostHorizontal");
+          noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
+          noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xAdditionalLinePaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+        
+      }
+    
+      // if(element.needsTrebbleClefTopMostHorizontal){
+      //   node.innerHTML +='<div class="trebbleclef-topmost-horizontal" id="musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal"+'"'+'/>';
+      //     let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal");
+      //     noteLineThoughHTMLElement.style.position = "absolute";
+      //     noteLineThoughHTMLElement.style.color = "black";
+      //     noteLineThoughHTMLElement.style.borderStyle = "solid";
+      //     noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
+      //     noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xAdditionalLinePaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+         
+      // }
 
-      // FOR CHECKING IF SHARPS OR FLATS ARE SELECTED
-      // const form = document.forms.demo;
-      // const checked = form.querySelector('input[name=characters]:checked'); 
-      // // log out the value from the :checked radio
-      // console.log(checked.value);
+      // if(element.needsTrebbleClefTopMostHorizontal){
+      //   node.innerHTML +='<div class="trebbleclef-topmost-horizontal" id="musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal"+'"'+'/>';
+      //     let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal");
+      //     noteLineThoughHTMLElement.style.position = "absolute";
+      //     noteLineThoughHTMLElement.style.color = "black";
+      //     noteLineThoughHTMLElement.style.borderStyle = "solid";
+      //     noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
+      //     noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xAdditionalLinePaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+         
+      // }
+
+      // if(element.needsTrebbleClefTopMostHorizontal){
+      //   node.innerHTML +='<div class="trebbleclef-topmost-horizontal" id="musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal"+'"'+'/>';
+      //     let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal");
+      //     noteLineThoughHTMLElement.style.position = "absolute";
+      //     noteLineThoughHTMLElement.style.color = "black";
+      //     noteLineThoughHTMLElement.style.borderStyle = "solid";
+      //     noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
+      //     noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xAdditionalLinePaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+         
+      // }
+
+      // if(element.needsTrebbleClefTopMostHorizontal){
+      //   node.innerHTML +='<div class="trebbleclef-topmost-horizontal" id="musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal"+'"'+'/>';
+      //     let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal");
+      //     noteLineThoughHTMLElement.style.position = "absolute";
+      //     noteLineThoughHTMLElement.style.color = "black";
+      //     noteLineThoughHTMLElement.style.borderStyle = "solid";
+      //     noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
+      //     noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xAdditionalLinePaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+         
+      // }
+
+      //  if(element.needsTrebbleClefTopMostHorizontal){
+      //   node.innerHTML +='<div class="trebbleclef-topmost-horizontal" id="musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal"+'"'+'/>';
+      //     let noteLineThoughHTMLElement = document.getElementById('musicNote'+element.noteID.toString()+"TrebbleClefTopMostHorizontal");
+      //     noteLineThoughHTMLElement.style.position = "absolute";
+      //     noteLineThoughHTMLElement.style.color = "black";
+      //     noteLineThoughHTMLElement.style.borderStyle = "solid";
+      //     noteLineThoughHTMLElement.style.zIndex = element.noteID.toString();      
+      //     noteLineThoughHTMLElement.style.left =  (3 + XPaddingLeft + xAdditionalLinePaddingLeft + xPositionPixelMultiplier * updateNumber).toString()  +'px';
+         
+      // }
+
+ 
+      
+ 
 
     }
     
@@ -321,8 +382,9 @@ var context=null;   // the Web Audio "context" object
 // note = {value, velocity, starttime}    
 var notesPlaying = []; 
 
-  function useMIDImessageToMoveNotePosition(message, _isSharpOrFlat, _noteNameAsString, _alreadyManipulated, _needsLineThroughMiddle,
-    _needsLineAbove, _needsLineBelow){
+  function useMIDImessageToMoveNotePosition(message, _isSharpOrFlat, _noteNameAsString, _alreadyManipulated, _needsTrebbleClefTopMostHorizontal,
+    _needsTrebbleClefSecondFromTopHorizontal, _needsTrebbleClefBottomHorizontal, _needsBaseClefTopHorizontal,
+    _needsBaseClefSecondFromBottonHorizontal,_needsBaseClefBottomMostHorizontal){
     if (message.data[2]==0){ // note off message
       let newDate = new Date();
       let noteEndTime = newDate.getTime();
@@ -336,44 +398,57 @@ var notesPlaying = [];
       let noteHtmlElement = document.getElementById('musicNote'+noteID.toString());
       if(noteHtmlElement == null) return ;
       
-      if(noteLength < 100){
-        noteHtmlElement.innerHTML = "&#119139;";
+
+       
+// 90 beats per minute -> 1.5 per second
+// whole note should be 4 / (1.5) seconds = 2.67 = 2670 milliseconds
+// get beats per minute -> convert to beats per second
+// get time for whole note (4 / beats per second)
+// then for each note find it's ratio fo whole note ie half note is whole note / 2
+      
+      console.log("noteLength");
+      console.log(noteLength);
+      console.log("wholeNotemilli")
+      console.log(wholeNoteMilliseconds);
+      
+      if(noteLength < (wholeNoteMilliseconds * 1.5 / 64)){
+        noteHtmlElement.innerHTML = "&#119139;"; // 64th note
         ;
       }
-      else if(noteLength < 200){
-        noteHtmlElement.innerHTML = "&#119138;"
+      else if((wholeNoteMilliseconds * .75 / 32 )< noteLength &&  noteLength < (wholeNoteMilliseconds * 1.5 / 32)){
+        noteHtmlElement.innerHTML = "&#119138;" // 32nd note
 
       }
-      else if(noteLength < 300){
-        noteHtmlElement.innerHTML = "&#119137;"
+      else if(wholeNoteMilliseconds * .75 / 16 < noteLength && noteLength < wholeNoteMilliseconds * 1.5/ 16){
+        noteHtmlElement.innerHTML = "&#119137;" // 16th note
 
       }
-      else if(noteLength < 400){
-        noteHtmlElement.innerHTML = "&#119136;"
+      else if(wholeNoteMilliseconds * .75 /8< noteLength  && noteLength < wholeNoteMilliseconds * 1.5/8){
+        noteHtmlElement.innerHTML = "&#119136;" // 8th note
 
       }
-      else if(noteLength < 500){
-        noteHtmlElement.innerHTML = "&#119135;"
+      else if(wholeNoteMilliseconds * .75 /4 < noteLength  && noteLength < wholeNoteMilliseconds * 1.5/4){
+        noteHtmlElement.innerHTML = "&#119135;" // quarter note
 
       }
-      else if(noteLength < 600){
-        noteHtmlElement.innerHTML = "&#119134;"
+      else if(wholeNoteMilliseconds * .75 /2< noteLength && noteLength < wholeNoteMilliseconds * 1.5/2){
+        noteHtmlElement.innerHTML = "&#119134;" // half note
 
       }
-      else if(noteLength < 700){
-        noteHtmlElement.innerHTML = "&#119133;"
+      else if(  wholeNoteMilliseconds * .75 < noteLength && noteLength < wholeNoteMilliseconds * 1.5){
+        noteHtmlElement.innerHTML = "&#119133;" // full note
 
       }
-      else if(noteLength < 800){
-        noteHtmlElement.innerHTML = "&#119132;"
+      else if(wholeNoteMilliseconds * .75 * 2 < noteLength && noteLength < wholeNoteMilliseconds * 1.5 *2){
+        noteHtmlElement.innerHTML = "&#119132;" // double
 
       }
-      else if(noteLength < 900){
-        noteHtmlElement.innerHTML = "&#119131;"
+      else if(wholeNoteMilliseconds * .75 * 4 < noteLength  && noteLength < wholeNoteMilliseconds * 1.5 * 4){
+        noteHtmlElement.innerHTML = "&#119131;" // quadruple
 
       }
       else{
-        noteHtmlElement.innerHTML = "&#119130;"
+        noteHtmlElement.innerHTML = "&#119130;" // 8times
       }
 
       
@@ -383,21 +458,42 @@ var notesPlaying = [];
     if (message.data[2]!==0) {  // if velocity != 0, this is a note-on message
         let key = message.data[1];
         let noteDistanceFromTop = 0;
-        let pixelOffset = 9.25;
-        let bottomOfBaseClefDistance = 292;
-        let bottomOfTrebbleClefDistance =  69;
+      
+        
         let isSharpOrFlat = _isSharpOrFlat || false;
         let noteNameAsString = _noteNameAsString || "";
         let alreadyManipulated = _alreadyManipulated || false;
-        let needsLineThroughMiddle = _needsLineThroughMiddle || false;
-        let needsLineAbove = _needsLineAbove || false;
-        let needsLineBelow = _needsLineBelow || false;
+
+
+        let needsTrebbleClefTopMostHorizontal = _needsTrebbleClefTopMostHorizontal || false;
+        let needsTrebbleClefSecondFromTopHorizontal  = _needsTrebbleClefSecondFromTopHorizontal || false;
+        let needsTrebbleClefBottomHorizontal = _needsTrebbleClefBottomHorizontal || false;
+        let needsBaseClefTopHorizontal = _needsBaseClefTopHorizontal || false;
+        let needsBaseClefSecondFromBottonHorizontal = _needsBaseClefSecondFromBottonHorizontal || false;
+        let needsBaseClefBottomMostHorizontal = _needsBaseClefBottomMostHorizontal || false;
+        
+        // <div class="trebbleclef-topmost-horizontal"></div>
+        // <div class="trebbleclef-secondfromtop-horizontal"></div>
+        // <div class="trebbleclef-bottom-horizontal"></div>
+
+        // <div class="baseclef-top-horizontal"></div>
+        // <div class="baseclef-secondfrombottom-horizontal"></div>
+        // <div class="baseclef-bottommost-horizontal"></div>
      
+        if (sharpsAndFlatsKeyNumbers.includes(key-1)){
+          key += toSharp? -1 : 1;
+          isSharpOrFlat = true
+        }
+        else{
+          isSharpOrFlat = false;
+        }
+
+
         switch(key -1) {
           //first midi note
           case 37:
-            needsLineThroughMiddle = true;
-            needsLineAbove = true;
+            needsBaseClefSecondFromBottonHorizontal = true;
+            needsBaseClefBottomMostHorizontal = true;
             noteDistanceFromTop = bottomOfBaseClefDistance + 4*pixelOffset;
             break;
 
@@ -406,7 +502,7 @@ var notesPlaying = [];
             break;
 
           case 39:
-            needsLineAbove = true;
+            needsBaseClefSecondFromBottonHorizontal = true;
             noteDistanceFromTop = bottomOfBaseClefDistance + 3*pixelOffset;
             break;
 
@@ -415,12 +511,12 @@ var notesPlaying = [];
             break;
 
           case 41:
-            needsLineThroughMiddle = true;
+            needsBaseClefSecondFromBottonHorizontal= true;
             noteDistanceFromTop = bottomOfBaseClefDistance + 2*pixelOffset;
             break;
 
           case 42:
-            needsLineBelow = true;
+            needsBaseClefSecondFromBottonHorizontal = true;
             noteDistanceFromTop = bottomOfBaseClefDistance + 1*pixelOffset;
             break;
 
@@ -493,12 +589,12 @@ var notesPlaying = [];
             break;
 
           case 60:
-            needsLineAbove = true;
+            needsBaseClefTopHorizontal = true;
             noteDistanceFromTop = bottomOfBaseClefDistance - 9 * pixelOffset;
             break;
 
           case 61:
-            needsLineThroughMiddle = true;
+            needsTrebbleClefBottomHorizontal = true;
             noteDistanceFromTop = bottomOfTrebbleClefDistance + 2*pixelOffset;
             break;
 
@@ -507,7 +603,7 @@ var notesPlaying = [];
             break;
 
           case 63: 
-            needsLineBelow = true;
+            needsTrebbleClefBottomHorizontal = true;
             noteDistanceFromTop = bottomOfTrebbleClefDistance + pixelOffset;
             break;
 
@@ -576,7 +672,7 @@ var notesPlaying = [];
             break;
 
           case 80:
-            needsLineAbove = true;
+            needsTrebbleClefSecondFromTopHorizontal = true;
             noteDistanceFromTop = bottomOfTrebbleClefDistance - 9 * pixelOffset;
             break;
 
@@ -585,7 +681,7 @@ var notesPlaying = [];
             break;
 
           case 82:
-            needsLineThroughMiddle = true;
+            needsTrebbleClefSecondFromTopHorizontal = true;
             noteDistanceFromTop = bottomOfTrebbleClefDistance - 10 * pixelOffset;
             break;
 
@@ -594,13 +690,13 @@ var notesPlaying = [];
             break;
 
           case 84:
-            needsLineBelow = true;
+            needsTrebbleClefSecondFromTopHorizontal = true;
             noteDistanceFromTop = bottomOfTrebbleClefDistance - 11 * pixelOffset;
             break;
 
           case 85:
-            needsLineThroughMiddle = true;
-            needsLineBelow = true;
+            needsTrebbleClefTopMostHorizontal  = true;
+            needsTrebbleClefSecondFromTopHorizontal = true;
             noteDistanceFromTop = bottomOfTrebbleClefDistance - 12 * pixelOffset;
             break;
      
@@ -608,20 +704,10 @@ var notesPlaying = [];
             break;
         } 
 
-        if(isSharpOrFlat && !alreadyManipulated){
-           // manipulate message to add the sharp or flat but put key in non-special location
-           var manipulatedMessage = message;
-           manipulatedMessage.data[1] += (toSharp? -1 : 1);
-
-           //message, _isSharpOrFlat, _noteNameAsString, _alreadyManipulated
-
-           // _isSharpOrFlat, _noteNameAsString, _alreadyManipulated, _needsLineThroughMiddle,
-    //_needsLineAbove, _needsLineBelow
-           useMIDImessageToMoveNotePosition(manipulatedMessage, true, "", true, needsLineThroughMiddle, _needsLineAbove, _needsLineBelow);
-        }
+        
         // turn key into note
 
-        else{
+     
           let topDistanceAsStyleString = noteDistanceFromTop.toString() + "px";
           let note = {key: message.data[1], 
             velocity: message.data[2], 
@@ -631,33 +717,36 @@ var notesPlaying = [];
             noteID: noteID+=1,
             isSharpOrFlat: isSharpOrFlat,
             isOffStanza: {booleanCheck: false, extraLinesRequired: 0, landsInLine: false  },
-            needsLineAbove: needsLineAbove,
-            needsLineThroughMiddle: needsLineThroughMiddle,
-            needsLineBelow: needsLineBelow,
-        };
+            needsTrebbleClefTopMostHorizontal : needsTrebbleClefTopMostHorizontal || false,
+            needsTrebbleClefSecondFromTopHorizontal  : needsTrebbleClefSecondFromTopHorizontal || false,
+            needsTrebbleClefBottomHorizontal : needsTrebbleClefBottomHorizontal || false,
+            needsBaseClefTopHorizontal : needsBaseClefTopHorizontal || false,
+            needsBaseClefSecondFromBottonHorizontal : needsBaseClefSecondFromBottonHorizontal || false,
+            needsBaseClefBottomMostHorizontal : needsBaseClefBottomMostHorizontal || false    };
+
+        
 
   
-  
-          console.log(note);
-          notesPlaying.push(note);
-          console.log(notesPlaying);
-        }
+        // console.log("hi");
+        //   console.log(note.needsTrebbleClefTopMostHorizontal);
+        notesPlaying.push(note);
+        //   console.log(notesPlaying);
+        // }
        
           
         //change html note position based on note
        
-        //document.getElementById("musicNote1").style.top = topDistanceAsStyleString;
-        //console.log(document.getElementById("musicNote1").style.top);
+       
        
     }
-    else if (message.data[2]===0) {
+    if (message.data[2]===0) {
       // hide note  
       notesPlaying = notesPlaying.filter(note => note.key !== message.data[1]);
       console.log(notesPlaying);
     } else {
       
     }
-  }
+  };
 
 
   function createRecording(){
@@ -673,19 +762,33 @@ var notesPlaying = [];
 
   function createReplayRecordingButton(){
     // 1. Create the button
-    var button = document.createElement("button");
-    button.innerHTML = "Show Recording" + String(recordings.length);
+
+    if (recordings.length == 1 ){
+      var option = document.createElement("option");
+      option.value = "Live";
+      option.innerHTML = "Live";
+      var node = document.getElementById("RecordingSelecter");
+      node.appendChild(option);
+
+      node.addEventListener('change', (event) => {      
+        showRecording(parseInt(event.target.value)-1);
+        console.log(parseInt(event.target.value));
+       
+});
+    }
+    var option = document.createElement("option");
+    option.value = String(recordings.length);
+    option.innerHTML = "Show Recording " + String(recordings.length);
 
 // 2. Append somewhere
-    var body = document.getElementsByTagName("body")[0];
-    body.appendChild(button);
+    var node = document.getElementById("RecordingSelecter");
+    node.appendChild(option);
 
+    var recordingsContainerDiv = document.getElementById("recordingsContainerDiv");
+    recordingsContainerDiv.style.visibility = "visible";
 // 3. Add event handler
-    const thisRecordingIndex = recordings.length - 1;
-    button.addEventListener ("click", function() {
-    console.log(thisRecordingIndex);
-    showRecording(thisRecordingIndex);}
-);
+   
+
 
 /* Read 
 
@@ -695,6 +798,8 @@ https://css-tricks.com/use-button-element/
 
   function showRecording(recordingIndex){
     
+    if (recordings[recordingIndex] === undefined ){return};
+    wipeStanza();
     recording = recordings[recordingIndex];
     for(var i = 0; i < recording.length; i++){
       document.getElementById("staffDiv").appendChild(recording[i]);

@@ -7,3 +7,33 @@
 body {
  
 }
+
+.titleBar {
+    margin-left: 35%;
+    margin-bottom: 20px;
+}
+.controlsContainer{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    padding: 5px;
+    border-bottom: gray solid;
+}
+
+.sharpsOrFlatsContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.staffDiv{
+  position: absolute;
+  top:175px
+}
+
+#recordingsContainerDiv{
+    display: flex;
+    justify-content: center;
+}

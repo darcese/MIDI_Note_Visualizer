@@ -1,12 +1,15 @@
-
-
-.musicNoteDiv {
-    font-size: xxx-large;
+.test-staff-width-horizontal { 
+    border-top: 0.13em solid black; 
+    height: 1px; 
+    width: 880px;
     position: absolute;
+    top: 134px;
+    left: 110px;
 }
 
-#musicNote1{
-    left: 429px; top: 50px;
+.musicNoteDiv {
+    font-size: 3.75em;
+    position: absolute;
 }
 
 
@@ -19,9 +22,6 @@
     top: 288px;
 }
 
-#musicNote3{
-    left: 429px; top: 250px;
-}
 
 
 
@@ -32,24 +32,61 @@
     top: 335px;
 }
 
-#musicNote4{
-    left: 429px; top: 300px;
-}
 
 
-#musicNote2{
-    left: 429px; top: 150px;
-}
 
-hr{
+.trebbleclef-topmost-horizontal { 
+    border-top: 0.13em solid black; 
+    height: 1px; 
+    width: 20px;
     position: absolute;
-    width: 32px;
-    left: 432px;
-    top: 185px;
-    color: black;
-    border-style: solid;
+    top: 7px;
+    right: 200px;
+} 
+
+.trebbleclef-secondfromtop-horizontal { 
+    border-top: 0.13em solid black; 
+    height: 1px; 
+    width: 20px;
+    position: absolute;
+    top: 25px;
+    right: 200px;
 }
 
+.trebbleclef-bottom-horizontal { 
+    border-top: 0.13em solid black; 
+    height: 1px; 
+    width: 20px;
+    position: absolute;
+    top: 134px;
+    right: 200px;
+}
 
+.baseclef-top-horizontal { 
+    border-top: 0.13em  solid black; 
+    height: 1px; 
+    width: 20px;
+    position: absolute;
+    top: 240px;
+    right: 200px;
+} 
+
+.baseclef-secondfrombottom-horizontal { 
+    border-top: 0.13em  solid black; 
+    height: 1px; 
+    width: 20px;
+    position: absolute;
+    top: 348px;
+    right: 200px;
+}
+
+.baseclef-bottommost-horizontal { 
+    border-top: 0.13em  solid black; 
+    height: 1px; 
+    width: 20px;
+    position: absolute;
+    top: 366px;
+    right: 200px;
+}
 
 */
