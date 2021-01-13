@@ -1,17 +1,5 @@
-
-//"use strict";
-
-
-
-// console.log(sharpsOrFlatsOption.length);
-// for (i = 0; i < sharpsOrFlatsOption.length; i++) {
-//     self =  sharpsOrFlatsOption[i];
-//     sharpsOrFlatsOption[i].addEventListener('change',  () => {
-//     () => {SharpsOrFlatsNow = this.value;
-//             console.log(SharpsOrFlatsNow)}();      
-//     })
-  
-//   }
+var synth;
+document.querySelector('button').click();
 
 var SharpsOrFlatsNow = "Sharps";
 const sharpsOption = document.getElementById("radioSharps")
@@ -36,7 +24,7 @@ let usableStanzaStart = 110;
 let beatsPerMinute = 120;
 let BeatsPerSecond = beatsPerMinute / 60;
 let wholeNoteMilliseconds = 1000 * 4 / BeatsPerSecond;
-let devMode = false;
+var devMode = false;
 let noteID = 2;
 let pixelOffset = 9;
 let toSharp = true; // if false then flat
@@ -285,20 +273,20 @@ var context=null;   // the Web Audio "context" object
       // patch up prefixes
       window.AudioContext=window.AudioContext||window.webkitAudioContext;
 
-      context = new AudioContext();
+      //context = new AudioContext();
       if (navigator.requestMIDIAccess)
         navigator.requestMIDIAccess({ sysex: true}).then( onMIDIInit, onMIDIReject );
       else
         alert("No MIDI support present in your browser.  You're gonna have a bad time.")
 
       // set up the basic oscillator chain, muted to begin with.
-      oscillator = context.createOscillator();
+      /* oscillator = context.createOscillator();
       oscillator.frequency.setValueAtTime(110, 0);
       envelope = context.createGain();
       oscillator.connect(envelope);
       envelope.connect(context.destination);
       envelope.gain.value = 0.0;  // Mute the sound
-      oscillator.start(0);  // Go ahead and start up the oscillator
+      oscillator.start(0);  // Go ahead and start up the oscillator */
     } );
 
     function onMIDIInit(midi) {
@@ -348,10 +336,12 @@ var context=null;   // the Web Audio "context" object
 
     function noteOn(noteNumber) {
       activeNotes.push( noteNumber );
-      oscillator.frequency.cancelScheduledValues(0);
-      oscillator.frequency.setTargetAtTime( frequencyFromNoteNumber(noteNumber), 0, portamento );
-      envelope.gain.cancelScheduledValues(0);
-      envelope.gain.setTargetAtTime(1.0, 0, attack);
+      console.log("am here");
+      document.querySelector('button').click();
+      // oscillator.frequency.cancelScheduledValues(0);
+      // oscillator.frequency.setTargetAtTime( frequencyFromNoteNumber(noteNumber), 0, portamento );
+      // envelope.gain.cancelScheduledValues(0);
+      // envelope.gain.setTargetAtTime(1.0, 0, attack);
     }
 
     function noteOff(noteNumber) {
@@ -377,6 +367,8 @@ var context=null;   // the Web Audio "context" object
     
     const onMIDIMessage = (message) => {
       console.log(`Raw MIDI message data: ${message.data}`)
+      synth.triggerAttackRelease("C4", "8n");
+      //document.querySelector('button').click();
     }
 
 // note = {value, velocity, starttime}    
@@ -750,6 +742,7 @@ var notesPlaying = [];
 
 
   function createRecording(){
+    
     console.log("creating recording");
     recording = [];
     const musicElements = document.getElementById("staffDiv").children;
